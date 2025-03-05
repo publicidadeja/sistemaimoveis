@@ -29,6 +29,13 @@ Route::group(['namespace' => 'Srapid\RealEstate\Http\Controllers', 'middleware' 
             'permission' => 'real-estate.settings',
         ]);
 
+        // VRSync XML Feed
+        Route::get('vrsync-feed', [
+            'as'         => 'real-estate.vrsync.feed',
+            'uses'       => 'VRSyncController@generateXml',
+            'permission' => 'real-estate.settings',
+        ]);
+
         Route::group(['prefix' => 'crm', 'as' => 'crm.'], function () {
             Route::resource('', 'CrmController')
                 ->parameters(['' => 'crm']);
@@ -116,7 +123,6 @@ Route::group(['namespace' => 'Srapid\RealEstate\Http\Controllers', 'middleware' 
         });
 
         Route::group(['prefix' => 'accounts', 'as' => 'account.'], function () {
-
             Route::resource('', 'AccountController')
                 ->parameters(['' => 'account']);
 
@@ -148,7 +154,6 @@ Route::group(['namespace' => 'Srapid\RealEstate\Http\Controllers', 'middleware' 
                 'permission' => 'package.destroy',
             ]);
         });
-
     });
 
     if (defined('THEME_MODULE_SCREEN_NAME')) {
@@ -177,7 +182,6 @@ Route::group(['namespace' => 'Srapid\RealEstate\Http\Controllers', 'middleware' 
             ]);
 
             Route::group(['as' => 'public.account.'], function () {
-
                 Route::group(['middleware' => ['account.guest']], function () {
                     Route::get('login', 'LoginController@showLoginForm')
                         ->name('login');
@@ -229,11 +233,16 @@ Route::group(['namespace' => 'Srapid\RealEstate\Http\Controllers', 'middleware' 
                 'as'   => 'feeds.zapimoveis',
                 'uses' => 'PublicController@getZapImoveisXml',
             ]);
+
+            // XML Feed para VRSync
+            Route::get('feed/vrsync', [
+                'as'   => 'feeds.vrsync',
+                'uses' => 'PublicController@getVRSyncXml',
+            ]);
         });
 
         Route::group(['middleware' => ['account'], 'as' => 'public.account.'], function () {
             Route::group(['prefix' => 'account'], function () {
-
                 Route::post('logout', 'LoginController@logout')
                     ->name('logout');
 
@@ -276,7 +285,6 @@ Route::group(['namespace' => 'Srapid\RealEstate\Http\Controllers', 'middleware' 
                     'as'   => 'transactions',
                     'uses' => 'PublicAccountController@getTransactions',
                 ]);
-
             });
 
             Route::group(['prefix' => 'account/ajax'], function () {

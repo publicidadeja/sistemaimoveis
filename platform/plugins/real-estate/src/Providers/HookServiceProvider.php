@@ -33,6 +33,7 @@ use MetaBox;
 use Route;
 use Throwable;
 use Exception;
+use Illuminate\Support\Facades\Event;
 
 class HookServiceProvider extends ServiceProvider
 {
@@ -343,7 +344,7 @@ class HookServiceProvider extends ServiceProvider
     }
     
     /**
-     * Sincroniza o imóvel com o ZAP Imóveis
+     * Sincroniza o imvel com o ZAP Imóveis
      *
      * @param Property $property
      * @param string $action
@@ -352,7 +353,7 @@ class HookServiceProvider extends ServiceProvider
     protected function syncWithZapImoveis(Property $property, string $action)
     {
         try {
-            // Verifica se a integração está habilitada
+            // Verifica se a integraão está habilitada
             $zapService = app(ZapImoveisService::class);
             
             if (!$zapService->isEnabled()) {
